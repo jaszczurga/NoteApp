@@ -9,7 +9,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.googlenotesclone.ui.theme.GoogleNotesConeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
