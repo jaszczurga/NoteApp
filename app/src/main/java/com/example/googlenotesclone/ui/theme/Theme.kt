@@ -1,4 +1,4 @@
-package com.example.googlenotescone.ui.theme
+package com.example.googlenotesclone.ui.theme
 
 import android.app.Activity
 import android.os.Build

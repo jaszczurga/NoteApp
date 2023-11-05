@@ -2,20 +2,21 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     // Add the Google services Gradle plugin
-    id("com.google.gms.google-services")
+    //id("com.google.gms.google-services")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.example.capstone"
+    namespace = "com.example.googlenotesclone"
     compileSdk = 34
 
 
 
     defaultConfig {
-        applicationId = "com.example.capstone"
+        applicationId = "com.example.googlenotesclone"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -58,11 +59,11 @@ android {
 dependencies {
 
     //firebase auth and firestore
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
+//    implementation("com.google.firebase:firebase-auth-ktx")
+//    implementation("com.google.firebase:firebase-firestore-ktx")
 
 
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
@@ -81,12 +82,12 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+   // implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
 
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    //implementation("com.google.firebase:firebase-analytics-ktx")
 
 
     // Add the dependencies for any other desired Firebase products

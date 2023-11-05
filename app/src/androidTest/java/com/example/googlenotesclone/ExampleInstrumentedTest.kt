@@ -1,4 +1,4 @@
-package com.example.googlenotescone
+package com.example.googlenotesclone
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

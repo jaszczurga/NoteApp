@@ -1,4 +1,4 @@
-package com.example.googlenotescone
+package com.example.googlenotesclone
 
 import org.junit.Test
 
