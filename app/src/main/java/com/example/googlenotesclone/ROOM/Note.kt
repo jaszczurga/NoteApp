@@ -1,0 +1,25 @@
+package com.example.googlenotesclone.ROOM
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+
+@Entity(tableName = "notes_table")
+data class Note(
+
+    /// przemyslec dodanie UUID oraz jakas zmiana date wtedy typeconverter w databse
+
+    @PrimaryKey
+    val id: Int,
+
+    @ColumnInfo(name = "title")
+    val title: String,
+
+    @ColumnInfo(name = "description")
+    val description: String,
+
+    //TODO(dodac date converter!!!)
+//    @ColumnInfo(name = "date")
+//    val date: Date=Date()
+)
