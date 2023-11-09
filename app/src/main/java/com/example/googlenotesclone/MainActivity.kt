@@ -3,11 +3,15 @@ package com.example.googlenotesclone
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.googlenotesclone.navigation.NotesAppNavigation
 import com.example.googlenotesclone.ui.theme.GoogleNotesConeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,18 +27,20 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
 @Composable
 fun NotesApp() {
     GoogleNotesConeTheme {
         // A surface container using the 'background' color from the theme
         Surface(
-            modifier=Modifier.fillMaxSize() ,
-            color=MaterialTheme.colorScheme.background
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-
-            //TODO  NotesAppNavigation()
-
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                NotesAppNavigation()
+            }
         }
     }
 }
