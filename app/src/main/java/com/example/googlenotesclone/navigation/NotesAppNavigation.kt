@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.googlenotesclone.screens.DeletedScreen
-import com.example.googlenotesclone.screens.HomeScreen
+import com.example.googlenotesclone.screens.HomeScreen.HomeScreen
 import com.example.googlenotesclone.screens.NoteScreen
 import com.example.googlenotesclone.screens.SearchScreen
 import com.example.googlenotesclone.screens.SettingsScreen
