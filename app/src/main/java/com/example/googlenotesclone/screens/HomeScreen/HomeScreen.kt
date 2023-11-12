@@ -2,31 +2,59 @@ package com.example.googlenotesclone.screens.HomeScreen
 
 import android.util.Log
 import android.widget.Space
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.Dataset
 import androidx.compose.material.icons.filled.Dehaze
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Segment
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,21 +65,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+
 
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,12 +105,42 @@ fun HomeScreen(navController : NavHostController = NavHostController(LocalContex
 
 @OptIn(ExperimentalMaterial3Api::class , ExperimentalComposeUiApi::class)
 @Composable
-fun HomeContent(drawerState : DrawerState , modifier : Modifier = Modifier) {
-    Scaffold() { contentPadding ->
+fun HomeContent(drawerState : DrawerState , modifier : Modifier = Modifier)  {
+    val notes = listOf(
+        "Notatka 1: To jest długa notatka o czymś ważnym. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget ante vel purus cursus fermentum. Sed vitae fermentum dolor. Vestibulum auctor, libero et fermentum scelerisque, nisl ligula hendrerit risus, in venenatis libero turpis ut sem.",
+        "Notatka 2: Krótka notatka.",
+        "Notatka 3: Inna ważna notatka. Vivamus at urna ligula. In hac habitasse platea dictumst. Proin facilisis odio non lacus venenatis, eu consectetur odio gravida. Sed eu malesuada elit.",
+        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
+        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
+        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
+        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
+        "Notatka 5: Krótka notatka.",
+        "Notatka 6: Notatka o czymś.",
+        "Notatka 7: To jest bardzo krótka notatka. Duis vehicula mauris vel lectus dignissim varius. Fusce suscipit augue non bibendum ullamcorper. Suspendisse potenti. Integer et bibendum quam.",
+        "Notatka 8: Długa notatka z ważnymi informacjami. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean fermentum facilisis eros a tincidunt.",
+        "Notatka 9: Jeszcze jedna krótka notatka. Sed auctor risus nec diam luctus, sit amet sollicitudin justo fermentum. Nullam in metus et risus suscipit ultricies. Suspendisse potenti."
+    )
+    Scaffold(
+        bottomBar = {
+            BottomAppBarWithFAB()
+        }
+    ) { contentPadding ->
         Log.d("HomeScreenPadding" , "HomeScreen padding:${contentPadding} ")
         // Screen content
         Column(modifier.fillMaxSize()) {
             SearchForm(drawerState = drawerState)
+            Spacer(modifier = Modifier.height(15.dp))
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                verticalItemSpacing = 7.dp,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                content = {
+                    items(items=notes) { t ->
+                        NoteCard(text = t)
+                    }
+                },
+                modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp)
+            )
         }
     }
 }
@@ -154,9 +219,9 @@ fun InputField(
         label = { Text(text = labelId) } ,
         singleLine = isSingleLine ,
         textStyle = TextStyle(fontSize = 18.sp , color = MaterialTheme.colorScheme.onBackground) ,
-        modifier =modifier
+        modifier = modifier
             .padding(10.dp , 10.dp , 10.dp)
-            .fillMaxWidth() ,
+            .fillMaxWidth(),
         enabled = enabled ,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType , imeAction = imeAction) ,
         keyboardActions = onAction ,
@@ -172,8 +237,8 @@ fun InputField(
                 Icon(
                     imageVector=Icons.Filled.Dataset ,
                     contentDescription="notes composition" ,
-                    modifier=Modifier
-                        .padding(top=15.dp , bottom=15.dp)
+                    modifier= Modifier
+                        .padding(top = 15.dp , bottom = 15.dp)
                         .clickable {
                             onTrailingIconCompositionClick.invoke()
                         }
@@ -181,12 +246,12 @@ fun InputField(
                 Icon(
                     imageVector=Icons.Filled.AccountCircle ,
                     contentDescription="profile" ,
-                    modifier=Modifier
+                    modifier= Modifier
                         .padding(
-                            top=15.dp ,
-                            bottom=15.dp ,
-                            end=15.dp ,
-                            start=20.dp
+                            top = 15.dp ,
+                            bottom = 15.dp ,
+                            end = 15.dp ,
+                            start = 20.dp
                         )
                         .clickable {
                             onTrailingIconProfileClick.invoke()
@@ -195,4 +260,75 @@ fun InputField(
             }
         }
     )
+}
+
+@Composable
+fun BottomAppBarWithFAB(
+    onClickCheckBoxIcon : ()->Unit = {},
+    onClickBrushIcon : ()->Unit = {},
+    onClickMicIcon : ()->Unit = {},
+    onClickPhotoIcon : ()->Unit = {},
+    onClickButton : ()->Unit={}
+) {
+    BottomAppBar(
+        actions = {
+            IconButton(onClick = { onClickCheckBoxIcon.invoke() }) {
+                Icon(Icons.Filled.CheckBox,
+                    contentDescription = "checkbox note")
+            }
+            IconButton(onClick = { onClickBrushIcon.invoke() }) {
+                Icon(
+                    Icons.Filled.Brush,
+                    contentDescription = "draw some note",
+                )
+            }
+            IconButton(onClick = { onClickMicIcon.invoke() }) {
+                Icon(
+                    Icons.Filled.Mic,
+                    contentDescription = "micro",
+                )
+            }
+            IconButton(onClick = { onClickPhotoIcon.invoke() }) {
+                Icon(
+                    Icons.Filled.Photo,
+                    contentDescription = "picture",
+                )
+            }
+
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { onClickButton.invoke() },
+                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+            ) {
+                Icon(Icons.Filled.Add, "Localized description")
+            }
+        }
+    )
+}
+
+
+@Composable
+fun NoteCard(text:String) {
+    OutlinedCard(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface ,
+        ) ,
+        border = BorderStroke(1.dp , Color.Gray) ,
+        modifier = Modifier
+            .fillMaxWidth()
+
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier
+                .padding(16.dp) ,
+            textAlign = TextAlign.Center ,
+            maxLines = 9,
+            overflow = TextOverflow.Ellipsis,
+            lineHeight = 14.sp,
+            fontSize = 13.sp
+        )
+    }
 }
