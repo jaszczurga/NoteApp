@@ -2,9 +2,12 @@ package com.example.googlenotesclone.screens.NoteScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -14,6 +17,8 @@ import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.TypeSpecimen
@@ -32,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,9 +65,9 @@ fun NoteScreen(navController : NavHostController) {
                     Text(
                         text = list[it],
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
+                        modifier =Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal=16.dp)
                     )
                 }
             }
@@ -104,58 +110,61 @@ fun NoteTopAppBar() {
 @Preview
 @Composable
 fun NoteBottomBar(
-    onClickAddBoxIcon : ()->Unit = {},
-    onClickPaletteIcon : ()->Unit = {},
-    onClickMicIcon : ()->Unit = {},
-    onClickPhotoIcon : ()->Unit = {},
-    onClickButton : ()->Unit={}
+    onClickAddBoxIcon : () -> Unit={} ,
+    onClickPaletteIcon : () -> Unit={} ,
+    onClickTypeSpecimen : () -> Unit={} ,
+    onClickUnDo : () -> Unit={} ,
+    onClickReDo : () -> Unit={} ,
+    onClickMore : () -> Unit={} ,
 ) {
     BottomAppBar(
-        modifier = Modifier.height(50.dp),
-        actions = {
-            IconButton(onClick = { onClickAddBoxIcon.invoke() }) {
-                Icon(Icons.Filled.AddBox,
-                    contentDescription = "add some fancy functions like micro")
-            }
-            IconButton(onClick = { onClickPaletteIcon.invoke() }) {
-                Icon(
-                    Icons.Filled.Palette,
-                    contentDescription = "some color change",
-                )
-            }
-            IconButton(onClick = { onClickMicIcon.invoke() }) {
-                Icon(
-                    Icons.Filled.TypeSpecimen,
-                    contentDescription = "typography changes",
-                )
-            }
-            Row(modifier = Modifier.padding(horizontal = 20.dp)) {
-                IconButton(
-                    onClick = { onClickPhotoIcon.invoke() }) {
+        modifier=Modifier.height(50.dp) ,
+        actions={
+            Row {
+                IconButton(onClick={ onClickAddBoxIcon.invoke() }) {
                     Icon(
-                        Icons.Filled.UTurnLeft ,
-                        contentDescription = "undochanges" ,
-                        modifier = Modifier.graphicsLayer(rotationZ = 90f)
+                        Icons.Filled.AddBox ,
+                        contentDescription="add some fancy functions like micro"
                     )
                 }
-                IconButton(
-                    onClick = { onClickPhotoIcon.invoke() }) {
+                IconButton(onClick={ onClickPaletteIcon.invoke() }) {
                     Icon(
-                        Icons.Filled.UTurnRight ,
-                        contentDescription = "undochanges" ,
-                        modifier = Modifier.graphicsLayer(rotationZ = 270f)
+                        Icons.Filled.Palette ,
+                        contentDescription="some color change" ,
                     )
                 }
-            }
-
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onClickButton.invoke() },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-            ) {
-                Icon(Icons.Filled.Add, "Localized description")
+                IconButton(onClick={ onClickTypeSpecimen.invoke() }) {
+                    Icon(
+                        Icons.Filled.TypeSpecimen ,
+                        contentDescription="typography changes" ,
+                    )
+                }
+                Row(modifier=Modifier.padding(horizontal=20.dp)) {
+                    IconButton(
+                        onClick={ onClickUnDo.invoke() }) {
+                        Icon(
+                            Icons.Filled.UTurnLeft ,
+                            contentDescription="undochanges" ,
+                            modifier=Modifier.graphicsLayer(rotationZ=90f)
+                        )
+                    }
+                    IconButton(
+                        onClick={ onClickReDo.invoke() }) {
+                        Icon(
+                            Icons.Filled.UTurnRight ,
+                            contentDescription="redo changes" ,
+                            modifier=Modifier.graphicsLayer(rotationZ=270f)
+                        )
+                    }
+                }
+                Spacer(modifier=Modifier.fillMaxWidth(0.8f))
+                IconButton(
+                    onClick={ onClickMore.invoke() }) {
+                    Icon(
+                        Icons.Default.MoreVert ,
+                        contentDescription="miedzy innymi usun"
+                    )
+                }
             }
         }
     )

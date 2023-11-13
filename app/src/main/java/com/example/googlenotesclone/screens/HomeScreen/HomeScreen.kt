@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +32,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -66,7 +68,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.googlenotesclone.components.AddButton
+import com.example.googlenotesclone.components.NoteCard
 import com.example.googlenotesclone.navigation.NotesAppScreens
+import com.google.android.material.bottomappbar.BottomAppBar.FabAlignmentMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -106,7 +111,10 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
     )
     Scaffold(
         bottomBar = {
-            BottomAppBarWithFAB(onClickButton = {
+            BottomAppBar()
+        },
+        floatingActionButton = {
+            AddButton(onClickButton = {
                 navController.navigate(NotesAppScreens.NoteScreen.name)
             })
         }
@@ -125,7 +133,9 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
                         NoteCard(text = t)
                     }
                 },
-                modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 10.dp)
             )
         }
     }
@@ -249,12 +259,11 @@ fun InputField(
 }
 
 @Composable
-fun BottomAppBarWithFAB(
+fun BottomAppBar(
     onClickCheckBoxIcon : ()->Unit = {},
     onClickBrushIcon : ()->Unit = {},
     onClickMicIcon : ()->Unit = {},
     onClickPhotoIcon : ()->Unit = {},
-    onClickButton : ()->Unit={}
 ) {
     BottomAppBar(
         modifier = Modifier.height(50.dp),
@@ -282,40 +291,9 @@ fun BottomAppBarWithFAB(
                 )
             }
 
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onClickButton.invoke() },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-            ) {
-                Icon(Icons.Filled.Add, "Localized description")
-            }
         }
     )
 }
 
 
-@Composable
-fun NoteCard(text:String) {
-    OutlinedCard(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface ,
-        ) ,
-        border = BorderStroke(1.dp , Color.Gray) ,
-        modifier = Modifier
-            .fillMaxWidth()
 
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier
-                .padding(16.dp) ,
-            textAlign = TextAlign.Center ,
-            maxLines = 9,
-            overflow = TextOverflow.Ellipsis,
-            lineHeight = 14.sp,
-            fontSize = 13.sp
-        )
-    }
-}
