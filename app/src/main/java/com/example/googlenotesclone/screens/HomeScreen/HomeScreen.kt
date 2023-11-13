@@ -1,52 +1,36 @@
 package com.example.googlenotesclone.screens.HomeScreen
 
 import android.util.Log
-import android.widget.Space
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Brush
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.Dataset
 import androidx.compose.material.icons.filled.Dehaze
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.Segment
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -65,7 +49,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -83,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.googlenotesclone.navigation.NotesAppScreens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -99,13 +83,13 @@ fun HomeScreen(navController : NavHostController = NavHostController(LocalContex
             ModalDrawerSheet { /* TODO(drawer content) */ }
         } ,
     ) {
-        HomeContent(drawerState = drawerState)
+        HomeContent(drawerState = drawerState, navController = navController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class , ExperimentalComposeUiApi::class)
 @Composable
-fun HomeContent(drawerState : DrawerState , modifier : Modifier = Modifier)  {
+fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier)  {
     val notes = listOf(
         "Notatka 1: To jest długa notatka o czymś ważnym. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget ante vel purus cursus fermentum. Sed vitae fermentum dolor. Vestibulum auctor, libero et fermentum scelerisque, nisl ligula hendrerit risus, in venenatis libero turpis ut sem.",
         "Notatka 2: Krótka notatka.",
@@ -122,7 +106,9 @@ fun HomeContent(drawerState : DrawerState , modifier : Modifier = Modifier)  {
     )
     Scaffold(
         bottomBar = {
-            BottomAppBarWithFAB()
+            BottomAppBarWithFAB(onClickButton = {
+                navController.navigate(NotesAppScreens.NoteScreen.name)
+            })
         }
     ) { contentPadding ->
         Log.d("HomeScreenPadding" , "HomeScreen padding:${contentPadding} ")
@@ -271,6 +257,7 @@ fun BottomAppBarWithFAB(
     onClickButton : ()->Unit={}
 ) {
     BottomAppBar(
+        modifier = Modifier.height(50.dp),
         actions = {
             IconButton(onClick = { onClickCheckBoxIcon.invoke() }) {
                 Icon(Icons.Filled.CheckBox,
