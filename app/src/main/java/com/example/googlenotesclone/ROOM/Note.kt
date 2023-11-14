@@ -9,9 +9,9 @@ import androidx.room.PrimaryKey
 data class Note(
 
     /// przemyslec dodanie UUID oraz jakas zmiana date wtedy typeconverter w databse
-
-    @PrimaryKey
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Long=0,
 
     @ColumnInfo(name = "title")
     val title: String,
@@ -22,4 +22,6 @@ data class Note(
     //TODO(dodac date converter!!!)
 //    @ColumnInfo(name = "date")
 //    val date: Date=Date()
+
+
 )

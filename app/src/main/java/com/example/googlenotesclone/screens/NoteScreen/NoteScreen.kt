@@ -73,25 +73,30 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.example.googlenotesclone.MainViewModel
+import com.example.googlenotesclone.ROOM.Note
 import com.example.googlenotesclone.navigation.NotesAppScreens
+import dagger.hilt.android.lifecycle.HiltViewModel
 
-@Preview
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current)) {
+fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : MainViewModel) {
+    val noteText = rememberSaveable { mutableStateOf("") }
+    val noteName = rememberSaveable { mutableStateOf("") }
     Scaffold(
         topBar = {
             NoteTopAppBar(onBackArrowClick = {
                 navController.navigate(NotesAppScreens.HomeScreen.name)
+                viewModel.addNote(Note(  title =noteName.value.toString(), description = noteText.value.toString()))
             })
         } ,
         bottomBar = {
             NoteBottomBar()
         } ,
         content = { innerPadding ->
-            val noteText = rememberSaveable { mutableStateOf("") }
-            val noteName = rememberSaveable { mutableStateOf("") }
             Log.d("NoteScreenPadding" , "NoteScreen: padding ${innerPadding}")
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
                 NoteInput(

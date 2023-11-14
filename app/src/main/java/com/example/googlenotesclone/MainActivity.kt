@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.googlenotesclone.navigation.NotesAppNavigation
 import com.example.googlenotesclone.ui.theme.GoogleNotesConeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NotesApp() {
+    val noteMainViewModel = viewModel<MainViewModel>()
     GoogleNotesConeTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -39,7 +41,7 @@ fun NotesApp() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                NotesAppNavigation()
+                NotesAppNavigation(noteMainViewModel)
             }
         }
     }

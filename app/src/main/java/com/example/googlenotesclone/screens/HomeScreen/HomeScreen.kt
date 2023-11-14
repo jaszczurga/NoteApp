@@ -47,6 +47,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -68,6 +69,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.googlenotesclone.MainViewModel
 import com.example.googlenotesclone.components.AddButton
 import com.example.googlenotesclone.components.NoteCard
 import com.example.googlenotesclone.navigation.NotesAppScreens
@@ -77,10 +79,10 @@ import kotlinx.coroutines.launch
 
 
 
-@Preview
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController : NavHostController = NavHostController(LocalContext.current)) {
+fun HomeScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : MainViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     ModalNavigationDrawer(
         drawerState = drawerState ,
@@ -88,27 +90,14 @@ fun HomeScreen(navController : NavHostController = NavHostController(LocalContex
             ModalDrawerSheet { /* TODO(drawer content) */ }
         } ,
     ) {
-        HomeContent(drawerState = drawerState, navController = navController)
+        HomeContent(drawerState = drawerState, navController = navController,viewModel=viewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class , ExperimentalComposeUiApi::class)
 @Composable
-fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier)  {
-    val notes = listOf(
-        "Notatka 1: To jest długa notatka o czymś ważnym. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget ante vel purus cursus fermentum. Sed vitae fermentum dolor. Vestibulum auctor, libero et fermentum scelerisque, nisl ligula hendrerit risus, in venenatis libero turpis ut sem.",
-        "Notatka 2: Krótka notatka.",
-        "Notatka 3: Inna ważna notatka. Vivamus at urna ligula. In hac habitasse platea dictumst. Proin facilisis odio non lacus venenatis, eu consectetur odio gravida. Sed eu malesuada elit.",
-        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
-        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
-        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
-        "Notatka 4: To jest jeszcze jedna długa notatka na temat czegoś. Quisque vitae orci ut odio luctus varius. Nulla facilisi. Curabitur vel tellus vel lacus feugiat vulputate.",
-        "Notatka 5: Krótka notatka.",
-        "Notatka 6: Notatka o czymś.",
-        "Notatka 7: To jest bardzo krótka notatka. Duis vehicula mauris vel lectus dignissim varius. Fusce suscipit augue non bibendum ullamcorper. Suspendisse potenti. Integer et bibendum quam.",
-        "Notatka 8: Długa notatka z ważnymi informacjami. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean fermentum facilisis eros a tincidunt.",
-        "Notatka 9: Jeszcze jedna krótka notatka. Sed auctor risus nec diam luctus, sit amet sollicitudin justo fermentum. Nullam in metus et risus suscipit ultricies. Suspendisse potenti."
-    )
+fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier,viewModel : MainViewModel)  {
+    val notes = viewModel.noteList.collectAsState().value
     Scaffold(
         bottomBar = {
             BottomAppBar()
@@ -117,7 +106,7 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
             AddButton(onClickButton = {
                 navController.navigate(NotesAppScreens.NoteScreen.name)
             })
-        }
+        },
     ) { contentPadding ->
         Log.d("HomeScreenPadding" , "HomeScreen padding:${contentPadding} ")
         // Screen content
@@ -130,7 +119,7 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 content = {
                     items(items=notes) { t ->
-                        NoteCard(text = t)
+                        NoteCard(name = t.title, description = t.description)
                     }
                 },
                 modifier = Modifier

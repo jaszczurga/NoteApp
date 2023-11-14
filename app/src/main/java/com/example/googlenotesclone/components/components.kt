@@ -33,7 +33,7 @@ fun AddButton(onClickButton : ()->Unit={}) {
     }
 }
 @Composable
-fun NoteCard(text:String) {
+fun NoteCard(name:String,description:String) {
     OutlinedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface ,
@@ -44,7 +44,17 @@ fun NoteCard(text:String) {
 
     ) {
         Text(
-            text = text,
+            text = name.trim(),
+            modifier = Modifier
+                .padding(16.dp) ,
+            textAlign = TextAlign.Center ,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            lineHeight = 16.sp,
+            fontSize = 18.sp
+        )
+        Text(
+            text = description.trim(),
             modifier = Modifier
                 .padding(16.dp) ,
             textAlign = TextAlign.Center ,
