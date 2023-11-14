@@ -1,5 +1,6 @@
 package com.example.googlenotesclone.screens.NoteScreen
 
+import android.text.Layout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,15 +13,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddBox
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.KeyboardBackspace
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.NotificationAdd
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.TypeSpecimen
 import androidx.compose.material.icons.filled.UTurnLeft
 import androidx.compose.material.icons.filled.UTurnRight
@@ -40,17 +45,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.googlenotesclone.navigation.NotesAppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreen(navController : NavHostController) {
     Scaffold(
         topBar = {
-                 NoteTopAppBar()
+                 NoteTopAppBar(onBackArrowClick = {
+                     navController.navigate(NotesAppScreens.HomeScreen.name)
+                 })
         },
         bottomBar = {
                     NoteBottomBar()
@@ -79,28 +88,39 @@ fun NoteScreen(navController : NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteTopAppBar() {
+fun NoteTopAppBar(
+    onBackArrowClick : ()->Unit={},
+    onPinClick : ()->Unit={},
+    onNotificationClick : ()->Unit={},
+    onArchiveClick : ()->Unit={}
+) {
     TopAppBar(
-        title = {
-            Text(
-                "Simple TopAppBar" ,
-                maxLines = 1 ,
-                overflow = TextOverflow.Ellipsis
-            )
-        } ,
+        title = {} ,
         navigationIcon = {
-            IconButton(onClick = { /* doSomething() */ }) {
+            IconButton(onClick = { onBackArrowClick.invoke() }) {
                 Icon(
-                    imageVector = Icons.Filled.Menu ,
+                    imageVector = Icons.Filled.KeyboardBackspace ,
                     contentDescription = "Localized description"
                 )
             }
         } ,
         actions = {
-            IconButton(onClick = { /* doSomething() */ }) {
+            IconButton(onClick = { onPinClick.invoke() }) {
                 Icon(
-                    imageVector = Icons.Filled.Favorite ,
-                    contentDescription = "Localized description"
+                    imageVector = Icons.Filled.PushPin ,
+                    contentDescription = "pinned"
+                )
+            }
+            IconButton(onClick = { onNotificationClick.invoke() }) {
+                Icon(
+                    imageVector = Icons.Filled.NotificationAdd ,
+                    contentDescription = "add notification"
+                )
+            }
+            IconButton(onClick = { onArchiveClick.invoke() }) {
+                Icon(
+                    imageVector = Icons.Filled.Archive ,
+                    contentDescription = "archive"
                 )
             }
         }
@@ -157,13 +177,14 @@ fun NoteBottomBar(
                         )
                     }
                 }
-                Spacer(modifier=Modifier.fillMaxWidth(0.8f))
-                IconButton(
-                    onClick={ onClickMore.invoke() }) {
-                    Icon(
-                        Icons.Default.MoreVert ,
-                        contentDescription="miedzy innymi usun"
-                    )
+                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                    IconButton(
+                        onClick={ onClickMore.invoke() }) {
+                        Icon(
+                            Icons.Default.MoreVert ,
+                            contentDescription="miedzy innymi usun",
+                        )
+                    }
                 }
             }
         }
