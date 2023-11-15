@@ -2,6 +2,7 @@ package com.example.googlenotesclone.screens.NoteScreen
 
 import android.text.Layout
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -86,6 +87,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : MainViewModel) {
     val noteText = rememberSaveable { mutableStateOf("") }
     val noteName = rememberSaveable { mutableStateOf("") }
+    BackHandler(noteName.value.toString().isNotEmpty() && noteText.value.toString().isNotEmpty()) {
+        viewModel.addNote(Note(  title =noteName.value.toString(), description = noteText.value.toString()))
+        navController.navigate(NotesAppScreens.HomeScreen.name)
+    }
     Scaffold(
         topBar = {
             NoteTopAppBar(onBackArrowClick = {

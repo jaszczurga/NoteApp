@@ -1,13 +1,11 @@
 package com.example.googlenotesclone.screens.HomeScreen
 
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.Dataset
@@ -27,20 +24,14 @@ import androidx.compose.material.icons.filled.Dehaze
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -54,27 +45,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
 import com.example.googlenotesclone.components.AddButton
 import com.example.googlenotesclone.components.NoteCard
 import com.example.googlenotesclone.navigation.NotesAppScreens
-import com.google.android.material.bottomappbar.BottomAppBar.FabAlignmentMode
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -107,11 +90,14 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
                 navController.navigate(NotesAppScreens.NoteScreen.name)
             })
         },
+        topBar = {
+            SearchForm(drawerState = drawerState)
+        }
     ) { contentPadding ->
         Log.d("HomeScreenPadding" , "HomeScreen padding:${contentPadding} ")
         // Screen content
-        Column(modifier.fillMaxSize()) {
-            SearchForm(drawerState = drawerState)
+        Column(modifier.fillMaxSize().padding(top = contentPadding.calculateTopPadding())) {
+           // SearchForm(drawerState = drawerState)
             Spacer(modifier = Modifier.height(15.dp))
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
