@@ -1,4 +1,4 @@
-package com.example.googlenotesclone.ROOM
+package com.example.googlenotesclone.data.ROOM
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -55,8 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
-import com.example.googlenotesclone.components.AddButton
-import com.example.googlenotesclone.components.NoteCard
+import com.example.googlenotesclone.util.AddButton
+import com.example.googlenotesclone.util.NoteCard
 import com.example.googlenotesclone.navigation.NotesAppScreens
 import kotlinx.coroutines.launch
 

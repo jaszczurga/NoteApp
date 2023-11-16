@@ -2,9 +2,9 @@ package com.example.googlenotesclone.DI
 
 import android.content.Context
 import androidx.room.Room
-import com.example.googlenotesclone.ROOM.NoteDao
-import com.example.googlenotesclone.ROOM.NoteDatabase
-import com.example.googlenotesclone.repository.NoteRepository
+import com.example.googlenotesclone.data.ROOM.NoteDao
+import com.example.googlenotesclone.data.ROOM.NoteDatabase
+import com.example.googlenotesclone.data.NoteRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

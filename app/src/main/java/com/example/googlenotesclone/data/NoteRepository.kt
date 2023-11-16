@@ -1,7 +1,7 @@
-package com.example.googlenotesclone.repository
+package com.example.googlenotesclone.data
 
-import com.example.googlenotesclone.ROOM.Note
-import com.example.googlenotesclone.ROOM.NoteDao
+import com.example.googlenotesclone.data.ROOM.Note
+import com.example.googlenotesclone.data.ROOM.NoteDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer

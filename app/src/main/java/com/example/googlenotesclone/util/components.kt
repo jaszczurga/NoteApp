@@ -1,4 +1,4 @@
-package com.example.googlenotesclone.components
+package com.example.googlenotesclone.util
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth

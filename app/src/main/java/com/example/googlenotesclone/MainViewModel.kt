@@ -3,8 +3,8 @@ package com.example.googlenotesclone
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.googlenotesclone.ROOM.Note
-import com.example.googlenotesclone.repository.NoteRepository
+import com.example.googlenotesclone.data.ROOM.Note
+import com.example.googlenotesclone.data.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

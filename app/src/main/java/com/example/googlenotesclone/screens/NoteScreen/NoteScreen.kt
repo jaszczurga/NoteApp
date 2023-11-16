@@ -77,17 +77,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
-import com.example.googlenotesclone.ROOM.Note
+import com.example.googlenotesclone.data.ROOM.Note
 import com.example.googlenotesclone.navigation.NotesAppScreens
 import dagger.hilt.android.lifecycle.HiltViewModel
 
-
+//
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : MainViewModel) {
     val noteText = rememberSaveable { mutableStateOf("") }
     val noteName = rememberSaveable { mutableStateOf("") }
-    BackHandler(noteName.value.toString().isNotEmpty() && noteText.value.toString().isNotEmpty()) {
+    BackHandler(noteName.value.toString().trim().isNotEmpty() && noteText.value.toString().trim().isNotEmpty()) {
         viewModel.addNote(Note(  title =noteName.value.toString(), description = noteText.value.toString()))
         navController.navigate(NotesAppScreens.HomeScreen.name)
     }
@@ -95,7 +95,14 @@ fun NoteScreen(navController : NavHostController = NavHostController(LocalContex
         topBar = {
             NoteTopAppBar(onBackArrowClick = {
                 navController.navigate(NotesAppScreens.HomeScreen.name)
-                viewModel.addNote(Note(  title =noteName.value.toString(), description = noteText.value.toString()))
+                if(noteName.value.toString().trim().isNotEmpty() && noteText.value.toString().trim().isNotEmpty()) {
+                    viewModel.addNote(
+                        Note(
+                            title = noteName.value.toString() ,
+                            description = noteText.value.toString()
+                        )
+                    )
+                }
             })
         } ,
         bottomBar = {
