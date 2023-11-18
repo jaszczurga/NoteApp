@@ -1,7 +1,6 @@
 package com.example.googlenotesclone.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,20 +14,20 @@ import com.example.googlenotesclone.screens.SettingsScreen
 @Composable
 fun NotesAppNavigation(viewModel : MainViewModel) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NotesAppScreens.HomeScreen.name){
-        composable(NotesAppScreens.HomeScreen.name){
+    NavHost(navController = navController, startDestination = NoteDestinations.HOME_ROUTE){
+        composable(NoteDestinations.HOME_ROUTE){
             HomeScreen(navController=navController,viewModel=viewModel)
         }
-        composable(NotesAppScreens.NoteScreen.name){
+        composable(NoteDestinations.NOTE_ROUTE){
             NoteScreen(navController=navController, viewModel=viewModel)
         }
-        composable(NotesAppScreens.DeletedScreen.name){
+        composable(NoteDestinations.DELETED_ROUTE){
             DeletedScreen(navController=navController)
         }
-        composable(NotesAppScreens.SearchScreen.name){
+        composable(NoteDestinations.SEARCH_ROUTE){
             SearchScreen(navController=navController)
         }
-        composable(NotesAppScreens.SettingsScreen.name){
+        composable(NoteDestinations.SETTINGS_ROUTE){
             SettingsScreen(navController=navController)
         }
     }

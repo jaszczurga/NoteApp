@@ -55,9 +55,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
+import com.example.googlenotesclone.navigation.NoteDestinations
 import com.example.googlenotesclone.util.AddButton
 import com.example.googlenotesclone.util.NoteCard
-import com.example.googlenotesclone.navigation.NotesAppScreens
 import kotlinx.coroutines.launch
 
 
@@ -87,7 +87,7 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
         },
         floatingActionButton = {
             AddButton(onClickButton = {
-                navController.navigate(NotesAppScreens.NoteScreen.name)
+                navController.navigate(NoteDestinations.NOTE_ROUTE)
             })
         },
         topBar = {
