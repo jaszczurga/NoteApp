@@ -36,7 +36,7 @@ fun NotesAppNavigation(modifier : Modifier = Modifier,
 
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: startDestination
-
+/
 
     NavHost(navController = navController,
         startDestination = NoteDestinations.HOME_ROUTE,
