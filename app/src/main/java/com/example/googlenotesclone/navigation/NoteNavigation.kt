@@ -22,7 +22,7 @@ private object NoteScreens{
 }
 
 object NoteDestinationArgs{
-    //arguments
+    const val NOTE_ID = "noteId"
 }
 
 object NoteDestinations{
@@ -36,5 +36,10 @@ object NoteDestinations{
 // navigation actions
 
 class NoteNavigationActions(private val navController: NavHostController){
+    //action of passing id of note from home screen to note screen
+    val openNote: (Int) -> Unit = { id ->
+        navController.navigate("${NoteDestinations.NOTE_ROUTE}/$id")
+    }
+
 
 }

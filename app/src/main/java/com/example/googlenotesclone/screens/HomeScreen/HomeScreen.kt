@@ -3,6 +3,7 @@ package com.example.googlenotesclone.screens.HomeScreen
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,9 +54,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
 import com.example.googlenotesclone.navigation.NoteDestinations
+import com.example.googlenotesclone.navigation.NoteNavigationActions
 import com.example.googlenotesclone.util.AddButton
 import com.example.googlenotesclone.util.NoteCard
 import kotlinx.coroutines.launch
@@ -65,8 +68,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : MainViewModel) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun HomeScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : HomeScreenViewModel= hiltViewModel(),drawerState : DrawerState) {
+    val drawerState = drawerState
     ModalNavigationDrawer(
         drawerState = drawerState ,
         drawerContent = {
@@ -79,7 +82,7 @@ fun HomeScreen(navController : NavHostController = NavHostController(LocalContex
 
 @OptIn(ExperimentalMaterial3Api::class , ExperimentalComposeUiApi::class)
 @Composable
-fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier,viewModel : MainViewModel)  {
+fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier,viewModel : HomeScreenViewModel)  {
     val notes = viewModel.noteList.collectAsState().value
     Scaffold(
         bottomBar = {
@@ -96,7 +99,10 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
     ) { contentPadding ->
         Log.d("HomeScreenPadding" , "HomeScreen padding:${contentPadding} ")
         // Screen content
-        Column(modifier.fillMaxSize().padding(top = contentPadding.calculateTopPadding())) {
+        Column(
+            modifier
+                .fillMaxSize()
+                .padding(top = contentPadding.calculateTopPadding())) {
            // SearchForm(drawerState = drawerState)
             Spacer(modifier = Modifier.height(15.dp))
             LazyVerticalStaggeredGrid(
@@ -105,7 +111,9 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 content = {
                     items(items=notes) { t ->
-                        NoteCard(name = t.title, description = t.description)
+                            NoteCard(name = t.title, description = t.description,modifier=Modifier.clickable {
+                                NoteNavigationActions(navController).openNote.invoke(t.id.toInt())
+                            })
                     }
                 },
                 modifier = Modifier

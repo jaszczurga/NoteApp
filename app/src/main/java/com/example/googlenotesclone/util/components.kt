@@ -33,13 +33,13 @@ fun AddButton(onClickButton : ()->Unit={}) {
     }
 }
 @Composable
-fun NoteCard(name:String,description:String) {
+fun NoteCard(name:String,description:String,modifier : Modifier) {
     OutlinedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface ,
         ) ,
         border = BorderStroke(1.dp , Color.Gray) ,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
 
     ) {

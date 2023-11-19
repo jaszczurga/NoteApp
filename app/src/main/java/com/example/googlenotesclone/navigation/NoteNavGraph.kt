@@ -10,10 +10,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.googlenotesclone.MainViewModel
 import com.example.googlenotesclone.screens.DeletedScreen
 import com.example.googlenotesclone.screens.HomeScreen.HomeScreen
@@ -36,16 +38,19 @@ fun NotesAppNavigation(modifier : Modifier = Modifier,
 
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: startDestination
-/
+
 
     NavHost(navController = navController,
         startDestination = NoteDestinations.HOME_ROUTE,
         modifier=modifier){
         composable(NoteDestinations.HOME_ROUTE){
-            HomeScreen(navController=navController,viewModel=viewModel)
+            HomeScreen(navController=navController,drawerState=drawerState)
         }
-        composable(NoteDestinations.NOTE_ROUTE){
-            NoteScreen(navController=navController, viewModel=viewModel)
+        composable("{NoteDestinations.NOTE_ROUTE}/{id}",arguments = listOf(navArgument(NoteDestinationArgs.NOTE_ID){
+            type = NavType.IntType
+            defaultValue = -1
+        })){
+            NoteScreen(navController=navController,noteId = it.arguments?.getInt(NoteDestinationArgs.NOTE_ID)?:-1)
         }
         composable(NoteDestinations.DELETED_ROUTE){
             DeletedScreen(navController=navController)

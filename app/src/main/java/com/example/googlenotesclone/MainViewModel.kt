@@ -15,21 +15,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository : NoteRepository) : ViewModel() {
 
-    private val _noteList = MutableStateFlow<List<Note>>(emptyList())
-    val noteList = _noteList.asStateFlow()
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getAllNotes()
-                .collect { listOfNotes ->
-                    if (listOfNotes.isNullOrEmpty()) {
-                        Log.d("GetNoteList", ": Empty list")
-                    }else {
-                        _noteList.value = listOfNotes
-                    }
-                }
-        }
-    }
 
     fun addNote(note: Note) = viewModelScope.launch { repository.addNote(note) }
     fun updateNote(note: Note) = viewModelScope.launch { repository.updateNote(note) }

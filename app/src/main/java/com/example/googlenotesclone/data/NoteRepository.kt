@@ -12,6 +12,7 @@ import javax.inject.Inject
 class NoteRepository @Inject constructor(private val dao : NoteDao) {
 
     suspend fun addNote(note: Note) = dao.insert(note)
+    suspend fun getNoteById(id: Int) = dao.getNoteById(id.toString())
     suspend fun updateNote(note: Note) = dao.update(note)
     suspend fun deleteNote(note: Note) = dao.deleteNote(note)
     suspend fun deleteAllNotes() = dao.deleteAll()

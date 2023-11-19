@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
 import com.example.googlenotesclone.data.ROOM.Note
@@ -57,9 +58,8 @@ import com.example.googlenotesclone.navigation.NoteDestinations
 //
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : MainViewModel) {
-    val noteText = rememberSaveable { mutableStateOf("") }
-    val noteName = rememberSaveable { mutableStateOf("") }
+fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : NoteScreenViewModel= hiltViewModel(),noteId : Int) {
+    val note = viewModel.uiState
     BackHandler(noteName.value.toString().trim().isNotEmpty() && noteText.value.toString().trim().isNotEmpty()) {
         viewModel.addNote(Note(  title =noteName.value.toString(), description = noteText.value.toString()))
         navController.navigate(NoteDestinations.HOME_ROUTE)
