@@ -1,5 +1,6 @@
 package com.example.googlenotesclone.navigation
 
+import android.util.Log
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,13 +45,17 @@ fun NotesAppNavigation(modifier : Modifier = Modifier,
         startDestination = NoteDestinations.HOME_ROUTE,
         modifier=modifier){
         composable(NoteDestinations.HOME_ROUTE){
-            HomeScreen(navController=navController,drawerState=drawerState)
+            HomeScreen(navController=navController,drawerState=drawerState,navActions=navActions)
         }
-        composable("{NoteDestinations.NOTE_ROUTE}/{id}",arguments = listOf(navArgument(NoteDestinationArgs.NOTE_ID){
+        composable("{NoteDestinations.NOTE_ROUTE}/{noteId}",arguments = listOf(navArgument(NoteDestinationArgs.NOTE_ID){
             type = NavType.IntType
-            defaultValue = -1
+            defaultValue = 1
         })){
-            NoteScreen(navController=navController,noteId = it.arguments?.getInt(NoteDestinationArgs.NOTE_ID)?:-1)
+            NoteScreen(navController=navController,noteId = it.arguments?.getInt(NoteDestinationArgs.NOTE_ID)!!)
+        }
+
+        composable(NoteDestinations.NOTE_ROUTE){
+            NoteScreen(navController=navController,noteId = -1)
         }
         composable(NoteDestinations.DELETED_ROUTE){
             DeletedScreen(navController=navController)

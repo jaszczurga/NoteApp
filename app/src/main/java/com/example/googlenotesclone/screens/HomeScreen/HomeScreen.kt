@@ -68,7 +68,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : HomeScreenViewModel= hiltViewModel(),drawerState : DrawerState) {
+fun HomeScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : HomeScreenViewModel= hiltViewModel(),drawerState : DrawerState,navActions:NoteNavigationActions) {
     val drawerState = drawerState
     ModalNavigationDrawer(
         drawerState = drawerState ,
@@ -76,13 +76,13 @@ fun HomeScreen(navController : NavHostController = NavHostController(LocalContex
             ModalDrawerSheet { /* TODO(drawer content) */ }
         } ,
     ) {
-        HomeContent(drawerState = drawerState, navController = navController,viewModel=viewModel)
+        HomeContent(drawerState = drawerState, navController = navController,viewModel=viewModel,navActions=navActions)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class , ExperimentalComposeUiApi::class)
 @Composable
-fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier,viewModel : HomeScreenViewModel)  {
+fun HomeContent(drawerState : DrawerState ,navController : NavHostController, modifier : Modifier = Modifier,viewModel : HomeScreenViewModel,navActions:NoteNavigationActions)  {
     val notes = viewModel.noteList.collectAsState().value
     Scaffold(
         bottomBar = {
@@ -112,7 +112,7 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
                 content = {
                     items(items=notes) { t ->
                             NoteCard(name = t.title, description = t.description,modifier=Modifier.clickable {
-                                NoteNavigationActions(navController).openNote.invoke(t.id.toInt())
+                                navActions.openNote.invoke(t.id.toInt())
                             })
                     }
                 },

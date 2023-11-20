@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,22 +60,58 @@ import com.example.googlenotesclone.navigation.NoteDestinations
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : NoteScreenViewModel= hiltViewModel(),noteId : Int) {
-    val note = viewModel.uiState
-    BackHandler(noteName.value.toString().trim().isNotEmpty() && noteText.value.toString().trim().isNotEmpty()) {
-        viewModel.addNote(Note(  title =noteName.value.toString(), description = noteText.value.toString()))
+    Log.d("NoteViewModel" , "NoteScreen comp: ${noteId}")
+
+    /////////wrocic tuu
+    if(noteId!=-1) {
+        viewModel.setId(noteId)
+    }
+    val nt = viewModel.getNote().note.title
+    val nd = viewModel.getNote().note.description
+    Log.d("ntandnd" , "NoteScreen: ${nt} ${nd}")
+
+    val noteText = remember{mutableStateOf(nt)}
+    val noteName = remember{mutableStateOf(nd)}
+
+
+    BackHandler(noteName.value.toString().trim().isNotEmpty() || noteText.value.toString().trim().isNotEmpty()){
         navController.navigate(NoteDestinations.HOME_ROUTE)
+            if(noteId!=-1)
+                viewModel.insertNote(
+                    Note(
+                        id = noteId.toLong() ,
+                        title = noteName.value.toString() ,
+                        description = noteText.value.toString()
+                    )
+                )
+            else
+                viewModel.addNote(
+                    Note(
+                        title = noteName.value.toString() ,
+                        description = noteText.value.toString()
+                    )
+                )
     }
     Scaffold(
         topBar = {
             NoteTopAppBar(onBackArrowClick = {
                 navController.navigate(NoteDestinations.HOME_ROUTE)
-                if(noteName.value.toString().trim().isNotEmpty() && noteText.value.toString().trim().isNotEmpty()) {
-                    viewModel.addNote(
-                        Note(
-                            title = noteName.value.toString() ,
-                            description = noteText.value.toString()
+                if(noteName.value.toString().trim().isNotEmpty() || noteText.value.toString().trim().isNotEmpty() ) {
+                    if(noteId!=-1)
+                        viewModel.updateNote(
+                            Note(
+                                id = noteId.toLong() ,
+                                title = noteName.value.toString() ,
+                                description = noteText.value.toString()
+                            )
                         )
-                    )
+                    else
+                        viewModel.addNote(
+                            Note(
+                                title = noteName.value.toString() ,
+                                description = noteText.value.toString()
+                            )
+                        )
                 }
             })
         } ,
@@ -89,7 +126,7 @@ fun NoteScreen(navController : NavHostController = NavHostController(LocalContex
                     enabled = true , modifier = Modifier.padding(top = innerPadding.calculateTopPadding()) ,
                     placeholder = {
                         Text(
-                            text = "Nazwa" ,
+                            text = noteName.value ,
                             fontSize = 25.sp
                         )
                     } ,
@@ -101,7 +138,7 @@ fun NoteScreen(navController : NavHostController = NavHostController(LocalContex
                     enabled = true ,
                     placeholder = {
                         Text(
-                            text = "Notatka" ,
+                            text = noteText.value ,
                             fontSize = 17.sp
                         )
                     } ,
@@ -229,8 +266,8 @@ fun NoteInput(
     isSingleLine : Boolean = false ,
     keyboardType : KeyboardType= KeyboardType.Text ,
     imeAction : ImeAction= ImeAction.None ,
-    onAction : KeyboardActions= KeyboardActions.Default,
-    textsize: TextUnit = 20.sp
+    onAction : KeyboardActions= KeyboardActions.Default ,
+    textsize : TextUnit = 20.sp
 ) {
     TextField(
         value = valueState.value ,
