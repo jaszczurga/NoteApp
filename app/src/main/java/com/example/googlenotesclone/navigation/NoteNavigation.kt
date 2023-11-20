@@ -1,6 +1,8 @@
 package com.example.googlenotesclone.navigation
 
 import androidx.navigation.NavHostController
+import com.example.googlenotesclone.navigation.NoteDestinationArgs.NOTE_ID
+import com.example.googlenotesclone.navigation.NoteScreens.NOTE_SCREEN
 
 //nie uzywamy enum
 //enum class NoteNavigation {
@@ -27,7 +29,7 @@ object NoteDestinationArgs{
 
 object NoteDestinations{
     const val HOME_ROUTE = NoteScreens.HOME_SCREEN
-    const val NOTE_ROUTE = NoteScreens.NOTE_SCREEN
+    const val NOTE_ROUTE = "$NOTE_SCREEN/{$NOTE_ID}"
     const val SEARCH_ROUTE = NoteScreens.SEARCH_SCREEN
     const val SETTINGS_ROUTE = NoteScreens.SETTINGS_SCREEN
     const val DELETED_ROUTE = NoteScreens.DELETED_SCREEN
@@ -37,8 +39,8 @@ object NoteDestinations{
 
 class NoteNavigationActions(private val navController: NavHostController){
     //action of passing id of note from home screen to note screen
-    val openNote: (Int) -> Unit = { id ->
-        navController.navigate("${NoteDestinations.NOTE_ROUTE}/$id")
+    fun navigateToNoteScreen(noteId : Int){
+        navController.navigate("$NOTE_SCREEN/$noteId")
     }
 
 

@@ -112,7 +112,7 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
                 content = {
                     items(items=notes) { t ->
                             NoteCard(name = t.title, description = t.description,modifier=Modifier.clickable {
-                                navActions.openNote.invoke(t.id.toInt())
+                                navActions.navigateToNoteScreen(t.id.toInt())
                             })
                     }
                 },

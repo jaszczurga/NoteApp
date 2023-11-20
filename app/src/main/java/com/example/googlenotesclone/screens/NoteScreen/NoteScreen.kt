@@ -34,6 +34,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -54,24 +55,19 @@ import androidx.navigation.NavHostController
 import com.example.googlenotesclone.MainViewModel
 import com.example.googlenotesclone.data.ROOM.Note
 import com.example.googlenotesclone.navigation.NoteDestinations
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 //
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : NoteScreenViewModel= hiltViewModel(),noteId : Int) {
-    Log.d("NoteViewModel" , "NoteScreen comp: ${noteId}")
+fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : NoteScreenViewModel= hiltViewModel()) {
 
-    /////////wrocic tuu
-    if(noteId!=-1) {
-        viewModel.setId(noteId)
-    }
-    val nt = viewModel.getNote().note.title
-    val nd = viewModel.getNote().note.description
-    Log.d("ntandnd" , "NoteScreen: ${nt} ${nd}")
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val noteId = uiState.note.id.toInt()
 
-    val noteText = remember{mutableStateOf(nt)}
-    val noteName = remember{mutableStateOf(nd)}
+    val noteText = remember{mutableStateOf(uiState.note.title)}
+    val noteName = remember{mutableStateOf(uiState.note.description)}
 
 
     BackHandler(noteName.value.toString().trim().isNotEmpty() || noteText.value.toString().trim().isNotEmpty()){
