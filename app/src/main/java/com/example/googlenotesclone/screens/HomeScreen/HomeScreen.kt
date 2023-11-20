@@ -90,7 +90,7 @@ fun HomeContent(drawerState : DrawerState ,navController : NavHostController, mo
         },
         floatingActionButton = {
             AddButton(onClickButton = {
-                navController.navigate(NoteDestinations.NOTE_ROUTE)
+                navActions.navigateToNoteScreen(noteId = null)
             })
         },
         topBar = {

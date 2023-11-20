@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,6 +21,9 @@ interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note)
+
+    @Upsert
+    suspend fun upsert(note: Note)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(note: Note)

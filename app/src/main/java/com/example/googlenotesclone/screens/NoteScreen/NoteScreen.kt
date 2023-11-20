@@ -33,11 +33,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,8 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.googlenotesclone.MainViewModel
-import com.example.googlenotesclone.data.ROOM.Note
 import com.example.googlenotesclone.navigation.NoteDestinations
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -63,52 +59,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun NoteScreen(navController : NavHostController = NavHostController(LocalContext.current),viewModel : NoteScreenViewModel= hiltViewModel()) {
 
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val noteId = uiState.note.id.toInt()
-
-    val noteText = remember{mutableStateOf(uiState.note.title)}
-    val noteName = remember{mutableStateOf(uiState.note.description)}
-
-
-    BackHandler(noteName.value.toString().trim().isNotEmpty() || noteText.value.toString().trim().isNotEmpty()){
+    BackHandler(true){
         navController.navigate(NoteDestinations.HOME_ROUTE)
-            if(noteId!=-1)
-                viewModel.insertNote(
-                    Note(
-                        id = noteId.toLong() ,
-                        title = noteName.value.toString() ,
-                        description = noteText.value.toString()
-                    )
-                )
-            else
-                viewModel.addNote(
-                    Note(
-                        title = noteName.value.toString() ,
-                        description = noteText.value.toString()
-                    )
-                )
+        viewModel.saveNote()
     }
     Scaffold(
         topBar = {
             NoteTopAppBar(onBackArrowClick = {
                 navController.navigate(NoteDestinations.HOME_ROUTE)
-                if(noteName.value.toString().trim().isNotEmpty() || noteText.value.toString().trim().isNotEmpty() ) {
-                    if(noteId!=-1)
-                        viewModel.updateNote(
-                            Note(
-                                id = noteId.toLong() ,
-                                title = noteName.value.toString() ,
-                                description = noteText.value.toString()
-                            )
-                        )
-                    else
-                        viewModel.addNote(
-                            Note(
-                                title = noteName.value.toString() ,
-                                description = noteText.value.toString()
-                            )
-                        )
-                }
+                viewModel.saveNote()
             })
         } ,
         bottomBar = {
@@ -117,28 +78,30 @@ fun NoteScreen(navController : NavHostController = NavHostController(LocalContex
         content = { innerPadding ->
             Log.d("NoteScreenPadding" , "NoteScreen: padding ${innerPadding}")
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
-                NoteInput(
-                    valueState = noteName ,
+                NoteInputTitle(
+                    valueState = uiState.note.title,
                     enabled = true , modifier = Modifier.padding(top = innerPadding.calculateTopPadding()) ,
                     placeholder = {
                         Text(
-                            text = noteName.value ,
+                            text = if(uiState.note.title.isEmpty()) "Title" else uiState.note.title ,
                             fontSize = 25.sp
                         )
                     } ,
                     textsize = 24.sp,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
+                    onTitleChanged = viewModel::updateTitle
                 )
-                NoteInput(
-                    valueState = noteText ,
+                NoteInputDescription(
+                    valueState = uiState.note.description ,
                     enabled = true ,
                     placeholder = {
                         Text(
-                            text = noteText.value ,
+                            text = if(uiState.note.title.isEmpty()) "Title" else uiState.note.description ,
                             fontSize = 17.sp
                         )
                     } ,
-                    textsize = 17.sp
+                    textsize = 17.sp,
+                    onDescriptionChanged = viewModel::updateDescription
                 )
             }
         }
@@ -254,23 +217,61 @@ fun NoteBottomBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteInput(
+fun NoteInputDescription(
     modifier : Modifier = Modifier ,
-    valueState : MutableState<String> ,
+    valueState : String ,
     placeholder : @Composable ()->Unit=  {Text(text="PLACEHOLDER")} ,
     enabled : Boolean ,
     isSingleLine : Boolean = false ,
     keyboardType : KeyboardType= KeyboardType.Text ,
     imeAction : ImeAction= ImeAction.None ,
     onAction : KeyboardActions= KeyboardActions.Default ,
-    textsize : TextUnit = 20.sp
+    textsize : TextUnit = 20.sp,
+    onDescriptionChanged: (String) -> Unit,
 ) {
     TextField(
-        value = valueState.value ,
-        onValueChange = { valueState.value = it } ,
+        value = valueState ,
+        onValueChange =  onDescriptionChanged ,
         placeholder = {
             placeholder()
                       },
+        singleLine = isSingleLine ,
+        textStyle = TextStyle(fontSize = textsize , color = MaterialTheme.colorScheme.onBackground) ,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background),
+        enabled = enabled ,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType , imeAction = imeAction) ,
+        keyboardActions = onAction,
+        colors = TextFieldDefaults.textFieldColors(
+            cursorColor=Color.White ,
+            containerColor=MaterialTheme.colorScheme.background ,
+            unfocusedIndicatorColor=MaterialTheme.colorScheme.background ,
+            focusedIndicatorColor=MaterialTheme.colorScheme.background
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NoteInputTitle(
+    modifier : Modifier = Modifier ,
+    valueState : String ,
+    placeholder : @Composable ()->Unit=  {Text(text="PLACEHOLDER")} ,
+    enabled : Boolean ,
+    isSingleLine : Boolean = false ,
+    keyboardType : KeyboardType= KeyboardType.Text ,
+    imeAction : ImeAction= ImeAction.None ,
+    onAction : KeyboardActions= KeyboardActions.Default ,
+    textsize : TextUnit = 20.sp,
+    onTitleChanged: (String) -> Unit,
+) {
+    TextField(
+        value = valueState ,
+        onValueChange =  onTitleChanged ,
+        placeholder = {
+            placeholder()
+        },
         singleLine = isSingleLine ,
         textStyle = TextStyle(fontSize = textsize , color = MaterialTheme.colorScheme.onBackground) ,
         modifier = modifier

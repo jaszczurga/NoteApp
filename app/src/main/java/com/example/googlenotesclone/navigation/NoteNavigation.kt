@@ -39,7 +39,7 @@ object NoteDestinations{
 
 class NoteNavigationActions(private val navController: NavHostController){
     //action of passing id of note from home screen to note screen
-    fun navigateToNoteScreen(noteId : Int){
+    fun navigateToNoteScreen(noteId : Int?){
         navController.navigate("$NOTE_SCREEN/$noteId")
     }
 

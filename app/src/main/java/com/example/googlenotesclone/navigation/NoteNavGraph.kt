@@ -47,13 +47,6 @@ fun NotesAppNavigation(modifier : Modifier = Modifier,
         composable(NoteDestinations.HOME_ROUTE){
             HomeScreen(navController=navController,drawerState=drawerState,navActions=navActions)
         }
-//        composable("{NoteDestinations.NOTE_ROUTE}/{noteId}",arguments = listOf(navArgument(NoteDestinationArgs.NOTE_ID){
-//            type = NavType.IntType
-//            defaultValue = 1
-//        })){
-//            NoteScreen(navController=navController,noteId = it.arguments?.getInt(NoteDestinationArgs.NOTE_ID)!!)
-//        }
-
         composable(NoteDestinations.NOTE_ROUTE){
             NoteScreen(navController=navController)
         }
