@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * from notes_table")
+    @Query("SELECT * from notes_table where is_archived = 0 and is_deleted = 0")
     fun getNotes():
             Flow<List<Note>>
 

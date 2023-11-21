@@ -96,7 +96,7 @@ fun NoteScreen(navController : NavHostController = NavHostController(LocalContex
                     enabled = true ,
                     placeholder = {
                         Text(
-                            text = if(uiState.note.title.isEmpty()) "Title" else uiState.note.description ,
+                            text = if(uiState.note.description.isEmpty()) "description" else uiState.note.description ,
                             fontSize = 17.sp
                         )
                     } ,

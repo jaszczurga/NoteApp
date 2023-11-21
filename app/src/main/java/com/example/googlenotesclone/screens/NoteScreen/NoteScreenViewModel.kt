@@ -74,7 +74,7 @@ class NoteScreenViewModel @Inject constructor(private val repository : NoteRepos
     fun saveNote() {
         Log.d("saveNote()log" , "saveNote: wywolanie saveNote")
         Log.d("saveNote()log" , "saveNote: ${uiState.value.note.title} ${uiState.value.note.id}")
-        if (uiState.value.note.title.isEmpty() || uiState.value.note.description.isEmpty()) {
+        if (uiState.value.note.title.isEmpty() && uiState.value.note.description.isEmpty()) {
             _uiState.update {
                 it.copy(userMessage = "note cannot be empty")
             }

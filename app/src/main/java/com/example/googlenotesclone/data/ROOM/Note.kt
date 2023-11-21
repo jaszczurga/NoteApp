@@ -1,8 +1,12 @@
 package com.example.googlenotesclone.data.ROOM
 
+import android.icu.util.Calendar
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Date
 
 
 @Entity(tableName = "notes_table")
@@ -19,9 +23,15 @@ data class Note(
     @ColumnInfo(name = "description")
     val description: String,
 
-    //TODO(dodac date converter!!!)
-//    @ColumnInfo(name = "date")
-//    val date: Date=Date()
+    @ColumnInfo(name = "is_archived")
+    val isArchived: Boolean=false,
+
+    @ColumnInfo(name = "is_deleted")
+    val isDeleted: Boolean=false,
+
+    //TODO("dodac do UI")
+    @ColumnInfo(name = "date")
+    val date :String= Calendar.getInstance().time.toString()
 
 
 )
